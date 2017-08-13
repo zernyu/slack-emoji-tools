@@ -12,7 +12,7 @@ class Download extends React.Component {
     super();
 
     this.state = {
-      emojis: null,
+      emojis: [],
       loading: true,
     }
   }
@@ -26,6 +26,10 @@ class Download extends React.Component {
     forEach(rows, (s) => {
       let trimmedName = /^:([a-z0-9\-\_]+):/i.exec(s.innerText);
       let trimmedUrl = /(https?:\/\/.*\.(png|jpg|gif))/.exec(s.cells[0].children[0].outerHTML);
+      if (trimmedUrl === null) {
+        // This is an emoji alias and not an actual upload
+        return;
+      }
 
       emojis.push({
         name: trimmedName[1] ? trimmedName[1] : s.innerText,
